@@ -57,11 +57,15 @@ impl Diagnostic {
         let mut out = format!("{sev}: {}", self.message);
         if let Some(span) = self.span {
             out.push_str(&format!(
-                "\n  --> {}:{}:{}",
-                span.line, span.col, span.start
+                "\n  --> {}:{}  (bytes {}-{})",
+                span.line, span.col, span.start, span.end
             ));
             if let Some(line) = src.lines().nth(span.line.saturating_sub(1) as usize) {
                 out.push_str(&format!("\n   | {line}"));
+                out.push_str(&format!(
+                    "\n   | {}^",
+                    " ".repeat(span.col.saturating_sub(1) as usize)
+                ));
             }
         }
         if let Some(help) = &self.help {
