@@ -39,7 +39,12 @@ pub enum Const {
 pub enum BinOp {
     Add,
     Sub,
-    Mul,
+    /// ±
+    Pm,
+    /// 乘法；`implicit` 区分隐式乘与显式 `*`
+    Mul {
+        implicit: bool,
+    },
     Div,
     Eq,
     Ne,
@@ -59,24 +64,26 @@ pub enum BinOp {
 pub enum UnaryOp {
     Neg,
     Not,
+    /// 后缀阶乘 `!`
+    Fact,
 }
 
-/// 矩阵定界符（matrix / bmatrix / vmatrix / pmatrix + 括号形态）。
+/// 矩阵定界符形态。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MatrixKind {
-    /// matrix(...) 圆括号
+    /// matrix(...) / pmatrix → 圆括号
     Paren,
-    /// matrix[...] 方括号
+    /// matrix[...] / bmatrix → 方括号
     Bracket,
-    /// matrix{...} 无界
+    /// matrix{...} → 无界
     Brace,
-    /// bmatrix 等显式前缀（保留）
-    Named(&'static str),
+    /// vmatrix → 竖线
+    Vmatrix,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Expr {
-    /// 数字字面量（保留原文，避免过早丢精度）
+    /// 数字字面量（保留原文）
     Number(String, Span),
     /// 变量/未保留标识符
     Var(String, Span),
@@ -84,16 +91,17 @@ pub enum Expr {
     Greek(String, Span),
     /// 常量
     Const(Const, Span),
-    /// 素记号求导：f'(x)、y'' 中的撇
+    /// 素记号求导：y'、y''
     Prime {
         base: Box<Expr>,
         order: u32,
         span: Span,
     },
-    /// 函数调用 sin(x) / fn 声明后的 f(a,b) / mid(a,b)
+    /// 函数调用；`primes` 支持 f'(x)
     Call {
         name: String,
         args: Vec<Expr>,
+        primes: u32,
         span: Span,
     },
     /// 一元运算
@@ -102,7 +110,7 @@ pub enum Expr {
         expr: Box<Expr>,
         span: Span,
     },
-    /// 二元运算（含隐式乘 Mul 无 * 字面）
+    /// 二元运算
     Binary {
         op: BinOp,
         lhs: Box<Expr>,
@@ -163,9 +171,7 @@ pub struct CaseBranch {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct AlignEq {
-    /// & 之前的左段（可为空表示续行）
-    pub lhs: Option<Expr>,
-    /// & = 之后的右段
+    pub lhs: Expr,
     pub rhs: Expr,
 }
 
