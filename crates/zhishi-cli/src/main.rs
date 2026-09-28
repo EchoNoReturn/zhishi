@@ -27,11 +27,21 @@ enum Commands {
     Tex { file: PathBuf },
     /// 打印 AST（调试）
     Ast { file: PathBuf },
-    /// 渲染为图片（M4）
+    /// 渲染为 SVG/PNG 图片
     Render {
         file: PathBuf,
+        /// 输出文件（.png 或 .svg）
         #[arg(short, long)]
         output: PathBuf,
+        /// 字号
+        #[arg(long, default_value_t = 24.0)]
+        font_size: f32,
+        /// 边距
+        #[arg(long, default_value_t = 8.0)]
+        margin: f32,
+        /// PNG 使用不透明白底（默认透明）
+        #[arg(long)]
+        opaque: bool,
     },
 }
 
@@ -103,10 +113,36 @@ fn main() -> ExitCode {
                 ExitCode::SUCCESS
             }
         },
-        Commands::Render { output, .. } => {
-            let _ = output;
-            eprintln!("error: render is not implemented yet (M4)");
-            ExitCode::FAILURE
-        }
+        Commands::Render {
+            output,
+            font_size,
+            margin,
+            opaque,
+            ..
+        } => match zhishi_core::parse(&src) {
+            Err(diag) => {
+                eprintln!("{}", diag.render(&src));
+                ExitCode::FAILURE
+            }
+            Ok(formula) => {
+                let tex = zhishi_tex::to_tex(&formula);
+                let opts = zhishi_render::RenderOpts {
+                    format: zhishi_render::RenderFormat::Png,
+                    font_size: *font_size,
+                    margin: *margin,
+                    transparent: !*opaque,
+                };
+                match zhishi_render::render_to_file(&tex, output, &opts) {
+                    Ok(()) => {
+                        eprintln!("wrote {}", output.display());
+                        ExitCode::SUCCESS
+                    }
+                    Err(e) => {
+                        eprintln!("error: {e}");
+                        ExitCode::FAILURE
+                    }
+                }
+            }
+        },
     }
 }

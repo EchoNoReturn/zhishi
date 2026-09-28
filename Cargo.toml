@@ -11,6 +11,7 @@ repository = "https://example.com/zhishi"
 [workspace.dependencies]
 zhishi-core = { path = "crates/zhishi-core" }
 zhishi-tex = { path = "crates/zhishi-tex" }
+zhishi-render = { path = "crates/zhishi-render" }
 clap = { version = "4", features = ["derive"] }
 
 [profile.dev]
