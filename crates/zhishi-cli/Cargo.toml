@@ -3,6 +3,7 @@ name = "zhishi-cli"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
 description = "zsc — 直式数学公式编译器 CLI"
 
 [[bin]]

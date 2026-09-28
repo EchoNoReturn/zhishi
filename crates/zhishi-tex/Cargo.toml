@@ -3,6 +3,7 @@ name = "zhishi-tex"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
 description = "直式 AST → LaTeX 后端"
 
 [dependencies]

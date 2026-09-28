@@ -3,6 +3,7 @@ name = "zhishi-render"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
 description = "直式渲染后端：TeX → SVG/PNG（MathJax/Node）"
 
 [dependencies]

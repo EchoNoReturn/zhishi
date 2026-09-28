@@ -6,7 +6,7 @@ resolver = "2"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-repository = "https://example.com/zhishi"
+repository = "https://github.com/EchoNoReturn/zhishi.git"
 
 [workspace.dependencies]
 zhishi-core = { path = "crates/zhishi-core" }
