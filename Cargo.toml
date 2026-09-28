@@ -1,0 +1,17 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://example.com/zhishi"
+
+[workspace.dependencies]
+zhishi-core = { path = "crates/zhishi-core" }
+zhishi-tex = { path = "crates/zhishi-tex" }
+clap = { version = "4", features = ["derive"] }
+
+[profile.dev]
+debug = true

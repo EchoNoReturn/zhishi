@@ -1,0 +1,15 @@
+[package]
+name = "zhishi-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "zsc — 直式数学公式编译器 CLI"
+
+[[bin]]
+name = "zsc"
+path = "src/main.rs"
+
+[dependencies]
+zhishi-core = { workspace = true }
+zhishi-tex = { workspace = true }
+clap = { workspace = true }

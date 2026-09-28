@@ -1,0 +1,1 @@
+vec(a) · vec(b) = ||a|| ||b|| cos(theta)

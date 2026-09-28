@@ -1,0 +1,10 @@
+[package]
+name = "zhishi-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "直式（ZhiShi）数学公式语言：词法、语法、AST、诊断与检查"
+
+[dependencies]
+
+[dev-dependencies]
