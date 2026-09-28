@@ -1,1 +1,2 @@
+fn f(x)
 int_a^b f'(x) dx = f(b) - f(a)
