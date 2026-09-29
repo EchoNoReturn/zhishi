@@ -133,12 +133,14 @@ pub fn render_to_file(tex: &str, out: &Path, opts: &RenderOpts) -> Result<(), Re
 }
 
 fn find_node() -> Result<PathBuf, RenderError> {
-    if let Ok(p) = std::env::var("MIMO_NODE") {
-        if Path::new(&p).exists() {
-            return Ok(PathBuf::from(p));
+    // npm 包装器注入的路径优先，其次 MiMo 运行时，再次 PATH
+    for key in ["ZHISHI_NODE", "MIMO_NODE"] {
+        if let Ok(p) = std::env::var(key) {
+            if Path::new(&p).exists() {
+                return Ok(PathBuf::from(p));
+            }
         }
     }
-    // PATH 上的 node / node.exe
     for name in ["node", "node.exe"] {
         if let Ok(p) = which(name) {
             return Ok(p);
@@ -148,9 +150,11 @@ fn find_node() -> Result<PathBuf, RenderError> {
 }
 
 fn find_node_modules() -> Option<PathBuf> {
-    if let Ok(p) = std::env::var("MIMO_NODE_MODULES") {
-        if Path::new(&p).join("mathjax-full").exists() {
-            return Some(PathBuf::from(p));
+    for key in ["ZHISHI_NODE_MODULES", "MIMO_NODE_MODULES"] {
+        if let Ok(p) = std::env::var(key) {
+            if Path::new(&p).join("mathjax-full").exists() {
+                return Some(PathBuf::from(p));
+            }
         }
     }
     None

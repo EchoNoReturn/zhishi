@@ -1,0 +1,40 @@
+{
+  "name": "zhishi",
+  "version": "0.1.0",
+  "description": "直式（ZhiShi）数学公式语言：编译为 LaTeX / SVG / PNG 的 CLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EchoNoReturn/zhishi.git"
+  },
+  "homepage": "https://github.com/EchoNoReturn/zhishi",
+  "bugs": {
+    "url": "https://github.com/EchoNoReturn/zhishi/issues"
+  },
+  "keywords": [
+    "math",
+    "latex",
+    "formula",
+    "cli",
+    "zhishi"
+  ],
+  "bin": {
+    "zsc": "bin/zsc.js"
+  },
+  "files": [
+    "bin",
+    "vendor",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "cargo build --release -p zhishi-cli && node scripts/copy-binary.js",
+    "copy-binary": "node scripts/copy-binary.js"
+  },
+  "dependencies": {
+    "mathjax-full": "^3.2.2",
+    "sharp": "^0.33.5"
+  }
+}

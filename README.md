@@ -21,8 +21,25 @@ cargo run -p zhishi-cli -- tex   examples/01-quadratic.zsh
 cargo run -p zhishi-cli -- render examples/01-quadratic.zsh -o out/01.png
 ```
 
-`render` 需要 Node.js，并用 `MIMO_NODE` / `MIMO_NODE_MODULES` 指到可用的
-`mathjax-full` + `sharp`（`check`/`tex` 不需要渲染依赖）。
+`render` 需要 Node.js（MathJax + sharp）。`check`/`tex` 不需要渲染依赖。
+
+## npm 安装（推荐给使用者）
+
+CLI 通过 npm 分发，Node 依赖由 npm 管理：
+
+```bash
+# 从源码打包安装（开发期）
+cargo build --release -p zhishi-cli
+node npm/scripts/copy-binary.js
+npm install -g ./npm
+
+# 发布后
+npm install -g zhishi
+zsc render formula.zsh -o formula.png
+```
+
+npm 包装器（`npm/bin/zsc.js`）会自动定位 `vendor/<platform>-<arch>/zsc`
+并注入 `ZHISHI_NODE` / `ZHISHI_NODE_MODULES`，无需手动配环境。
 
 ## 仓库结构
 
