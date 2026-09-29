@@ -15,13 +15,21 @@
 
 ```bash
 cargo build
-cargo test                 # 16 单测 + 20 黄金样例
+cargo test                 # 22 单测 + 20 黄金样例
 cargo run -p zhishi-cli -- check examples/01-quadratic.zsh
 cargo run -p zhishi-cli -- tex   examples/01-quadratic.zsh
 cargo run -p zhishi-cli -- render examples/01-quadratic.zsh -o out/01.png
 ```
 
-`render` 需要 Node.js（MathJax + sharp）。`check`/`tex` 不需要渲染依赖。
+`check`/`tex` 零渲染依赖。`render` 需要 Node.js（>= 18）以及 MathJax/sharp：
+直接跑 cargo 二进制时要自己指定依赖目录 `ZHISHI_NODE_MODULES`；
+走 npm 包装器（`node npm/bin/zsc.js`）则会自动注入，但前提是先按下一节打包好 vendor 二进制。
+
+```bash
+npm install --prefix npm
+ZHISHI_NODE_MODULES=$PWD/npm/node_modules \
+  cargo run -p zhishi-cli -- render examples/01-quadratic.zsh -o out/01.png
+```
 
 ## npm 安装（推荐给使用者）
 
